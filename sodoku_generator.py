@@ -55,10 +55,35 @@ class SudokuGenerator:
                 num +=1
 
     def fill_diagonal(self):
+        for i in range(0, self.row_length):
+            self.fill_box(i, i)
 
     def fill_remaining(self):
-
+        for row in range(self.row_length):
+            for col in range(self.row_length):
+                if self.board[row][col] == 0:
+                    for num in range(1, 10):
+                        if self.is_valid(row, col, num):
+                            self.board[row][col] = num
+                            if self.fill_remaining():
+                                return True
+                            self.board[row][col] = 0
+                    return False
     def fill_values(self):
+        self.fill_diagonal()
+        self.fill_remaining()
 
     def remove_cells(self):
+        remove = 0
+        while remove < self.cells:
+            row = random.randint( 0 , 8)
+            col = random.randint(0, 8)
+            if self.oard[row][col] != 0:
+                self.board[row][col] = 0
+                remove +=1
 
+def generate_sudoku(size,remove):
+    sudoku = SudokuGenerator(size,remove)
+    sudoku.fill_values()
+    sudoku.remove_cells()
+    return sudoku.get_board()
